@@ -11,36 +11,71 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   VerifyResponseModel? get verifyResponse => _verifyResponse;
   LoginResponseModel? get loginResponse => _loginResponse;
+  String? _phoneNumber = '';
+  String? get phoneNumber => _phoneNumber;
+  bool _newUser = false;
+  bool get newUser => _newUser;
 
-  Future<void> verifyUser(String number) async {
+  Future<bool> verifyUser(String number) async {
+    print(number);
     _isLoading = true;
     notifyListeners();
     try {
-      final response = await _service.verifyUser(number);
-      if (response!.user == true) {
-        await TokenManager().saveToken(response.accessToken);
+      final response = await _service.verifyService(number);
+      print(response?.otp);
+      if (response == null) {
+        _verifyResponse = null;
+        return false;
+      }
+
+      // save token if available and user is registered
+      if (response.user == true && response.accessToken != null) {
         _verifyResponse = response;
-      } else {}
+        final token = response.accessToken!;
+        await TokenManager().saveToken(token);
+        return true;
+      }
+
+      if (response.user == false) {
+        _verifyResponse = response;
+        _newUser = true;
+        _phoneNumber = number;
+        return false;
+      }
+
+      return response.user == true;
     } catch (e) {
       print("Error in verifyUser: $e");
+      _verifyResponse = null;
+      return false;
     } finally {
       _isLoading = false;
+      notifyListeners();
     }
   }
 
-  Future<void> loginRegister(String number, String name) async {
+  Future<bool> loginRegister(String name) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final response = await _service.loginRegister(number, name);
-      if (response != null) {
-        await TokenManager().saveToken(response.accessToken);
+      final response = await _service.loginService(_phoneNumber!, name);
+      print(response?.message);
+
+      final token = response?.accessToken;
+      if (token != null) {
+        await TokenManager().saveToken(token);
         _loginResponse = response;
-      } else {}
+        return true;
+      } else {
+        _loginResponse = response;
+        return false;
+      }
     } catch (e) {
       print("Error in loginRegister: $e");
+      throw Exception('Login/Register failed: $e');
     } finally {
       _isLoading = false;
+      notifyListeners();
     }
   }
 }

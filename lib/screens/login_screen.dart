@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:product_app/provider/auth_provider.dart';
+import 'package:product_app/screens/opt_verification_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,10 +34,17 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void _onContinuePressed() {
-    if (_phoneController.text.isNotEmpty) {
-      // Handle login logic here
-      debugPrint('Phone number: +91${_phoneController.text}');
+  void _onContinuePressed() async {
+    final phoneNumber = _phoneController.text.trim();
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final res = await auth.verifyUser(phoneNumber);
+    if (res) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OptVerificationScreen(phoneNumber: phoneNumber),
+        ),
+      );
     }
   }
 
