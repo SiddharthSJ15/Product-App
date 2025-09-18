@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => AuthProvider(),
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Product App',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: AppColors.primary,
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        debugShowCheckedModeBanner: false,
         home: const LoginPage(),
       ),
     );
