@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:product_app/screens/home_screen.dart';
+import 'package:product_app/screens/product_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:product_app/provider/auth_provider.dart';
 
