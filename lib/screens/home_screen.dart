@@ -63,14 +63,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
+      extendBody: true, // Allows body to extend behind bottom nav
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(16),
         height: 72,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(37), // 74/2 = 37
+          color: Colors.white.withOpacity(0.95),
+          borderRadius: BorderRadius.circular(37),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
@@ -106,9 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: const Color(0xFF6C63FF),
-                            borderRadius: BorderRadius.circular(
-                              28,
-                            ), // 56/2 = 28
+                            borderRadius: BorderRadius.circular(28),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
