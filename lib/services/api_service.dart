@@ -7,7 +7,7 @@ class ApiService {
   final String baseUrl = "https://skilltestflutter.zybotechlab.com/api";
   final TokenManager _tokenManager = TokenManager();
 
-  Future<VerifyResponseModel?> verifyUser(String number) async {
+  Future<VerifyResponseModel?> verifyService(String number) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/verify/'),
@@ -28,7 +28,7 @@ class ApiService {
     }
   }
 
-  Future<LoginResponseModel?> loginRegister(String number, String name) async {
+  Future<LoginResponseModel?> loginService(String number, String name) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/login-register/'),

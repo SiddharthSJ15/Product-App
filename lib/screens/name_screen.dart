@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:product_app/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:product_app/provider/auth_provider.dart';
 
 class NameScreen extends StatefulWidget {
-  const NameScreen({super.key});
+  final String? phoneNumber;
+
+  const NameScreen({super.key, this.phoneNumber});
 
   @override
   State<NameScreen> createState() => _NameScreenState();
@@ -10,6 +15,31 @@ class NameScreen extends StatefulWidget {
 
 class _NameScreenState extends State<NameScreen> {
   final TextEditingController _nameController = TextEditingController();
+
+  void login() async {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final name = _nameController.text.trim();
+    if (_nameController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Name cannot be empty')));
+      return;
+    }
+
+    if (_nameController.text.isNotEmpty) {
+      final res = await auth.loginRegister(name);
+      if (res) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Registration failed')));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +52,7 @@ class _NameScreenState extends State<NameScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -86,7 +116,9 @@ class _NameScreenState extends State<NameScreen> {
                 height: 56,
                 margin: const EdgeInsets.only(bottom: 24),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    login();
+                  },
                   child: const Text(
                     'Continue',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),

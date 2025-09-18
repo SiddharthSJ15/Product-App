@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_app/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:product_app/provider/auth_provider.dart';
+import 'package:product_app/screens/name_screen.dart';
 import 'package:product_app/constants/colors.dart';
 import 'package:pinput/pinput.dart';
 
 class OptVerificationScreen extends StatefulWidget {
-  const OptVerificationScreen({super.key});
+  final String phoneNumber;
+
+  const OptVerificationScreen({super.key, required this.phoneNumber});
 
   @override
   State<OptVerificationScreen> createState() => _OptVerificationScreenState();
@@ -12,7 +18,31 @@ class OptVerificationScreen extends StatefulWidget {
 
 class _OptVerificationScreenState extends State<OptVerificationScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void verification() {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    if (auth.newUser) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => NameScreen(phoneNumber: widget.phoneNumber),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -62,7 +92,7 @@ class _OptVerificationScreenState extends State<OptVerificationScreen> {
                     ),
                   ),
                   Text(
-                    '- +91-8976500001',
+                    '- +91-${widget.phoneNumber}',
                     style: GoogleFonts.oxygen(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -82,7 +112,7 @@ class _OptVerificationScreenState extends State<OptVerificationScreen> {
                   ),
                   const Text(' '),
                   Text(
-                    '4749',
+                    '${auth.verifyResponse!.otp}',
                     style: GoogleFonts.oxygen(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -140,9 +170,7 @@ class _OptVerificationScreenState extends State<OptVerificationScreen> {
                     ),
                   ),
                   showCursor: false,
-                  onCompleted: (pin) {
-                    debugPrint('Completed: $pin');
-                  },
+                  onCompleted: (value) => verification(),
                 ),
               ),
 
