@@ -17,7 +17,6 @@ class _BannerScreenState extends State<BannerScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch banners when the widget initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ApiProvider>(context, listen: false).fetchBanners();
     });

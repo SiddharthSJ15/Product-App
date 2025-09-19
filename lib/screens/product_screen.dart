@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:product_app/screens/banner_screen.dart';
+import 'package:product_app/screens/latest_product.dart';
 import 'package:product_app/screens/popular_products.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -24,6 +25,8 @@ class _ProductScreenState extends State<ProductScreen> {
               BannerScreen(),
               const SizedBox(height: 20),
               PopularProducts(),
+              const SizedBox(height: 20),
+              LatestProduct(),
               const SizedBox(height: 92),
             ],
           ),
