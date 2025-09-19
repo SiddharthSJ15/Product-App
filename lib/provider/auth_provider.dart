@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:product_app/constants/token_manager.dart';
-import 'package:product_app/models/response_model.dart';
+import 'package:product_app/models/models.dart';
 import 'package:product_app/services/api_service.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -78,4 +78,5 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
 }

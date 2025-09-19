@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:product_app/provider/api_provider.dart';
 import 'package:product_app/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:product_app/provider/auth_provider.dart';
@@ -13,8 +14,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AuthProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ApiProvider()),
+      ],
       child: MaterialApp(
         title: 'Product App',
         theme: ThemeData(

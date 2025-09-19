@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:product_app/models/response_model.dart';
+import 'package:product_app/models/models.dart';
 import 'package:product_app/constants/token_manager.dart';
 
 class ApiService {
@@ -45,6 +45,48 @@ class ApiService {
     } catch (e) {
       print("Error in login/register: $e");
       return null;
+    }
+  }
+
+  Future<List<BannerModel>> fetchBanners() async {
+    try {
+      final token = await _tokenManager.getToken();
+      final response = await http.get(
+        Uri.parse('$baseUrl/banners/'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((json) => BannerModel.fromJson(json)).toList();
+      } else {
+        print("Failed to load banners: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Error fetching banners: $e");
+      return [];
+    }
+  }
+
+  Future<List<ProductModel>> fetchProducts() async {
+    try {
+      final token = await _tokenManager.getToken();
+      final response = await http.get(
+        Uri.parse('$baseUrl/products/'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        print("Failed to load products: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Error fetching products: $e");
+      return [];
     }
   }
 }

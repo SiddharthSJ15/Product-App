@@ -64,109 +64,120 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      extendBody: true, // Allows body to extend behind bottom nav
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.all(16),
-        height: 72,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.95),
-          borderRadius: BorderRadius.circular(37),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 8,
-            right: _selectedIndex != 2 ? 16 : 8,
-            bottom: 8,
-            left: _selectedIndex != 0 || _selectedIndex == 1 ? 16 : 8,
+      extendBody: true,
+      body: Stack(
+        children: [
+          // Use a SizedBox.expand() or another widget to fill the screen
+          SizedBox.expand(
+            child: _pages[_selectedIndex],
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _navItems.asMap().entries.map((entry) {
-              int index = entry.key;
-              NavItem item = entry.value;
-              bool isSelected = _selectedIndex == index;
+          Positioned(
+            bottom: 16,
+            left: 16,
+            right: 16,
+            child: Container(
+              height: 72,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.95),
+                borderRadius: BorderRadius.circular(37),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 8,
+                  right: _selectedIndex != 2 ? 16 : 8,
+                  bottom: 8,
+                  left: _selectedIndex != 0 || _selectedIndex == 1 ? 16 : 8,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _navItems.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    NavItem item = entry.value;
+                    bool isSelected = _selectedIndex == index;
 
-              return isSelected
-                  ? Container(
-                      width: 119,
-                      height: 56,
-                      child: GestureDetector(
-                        onTap: () => _onItemTapped(index),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF6C63FF),
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                item.svgPath,
-                                width: 20,
-                                height: 20,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.white,
-                                  BlendMode.srcIn,
+                    return isSelected
+                        ? Container(
+                            width: 119,
+                            height: 56,
+                            child: GestureDetector(
+                              onTap: () => _onItemTapped(index),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF6C63FF),
+                                  borderRadius: BorderRadius.circular(28),
                                 ),
-                              ),
-                              const SizedBox(width: 8),
-                              Flexible(
-                                child: AnimatedBuilder(
-                                  animation: _animation,
-                                  builder: (context, child) {
-                                    return Transform.scale(
-                                      scale: _animation.value,
-                                      child: Text(
-                                        item.label,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      item.svgPath,
+                                      width: 20,
+                                      height: 20,
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.srcIn,
                                       ),
-                                    );
-                                  },
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: AnimatedBuilder(
+                                        animation: _animation,
+                                        builder: (context, child) {
+                                          return Transform.scale(
+                                            scale: _animation.value,
+                                            child: Text(
+                                              item.label,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  : GestureDetector(
-                      onTap: () => _onItemTapped(index),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        child: Center(
-                          child: SvgPicture.asset(
-                            item.svgPath,
-                            width: 20,
-                            height: 20,
-                            colorFilter: ColorFilter.mode(
-                              Colors.grey.shade600,
-                              BlendMode.srcIn,
                             ),
-                          ),
-                        ),
-                      ),
-                    );
-            }).toList(),
+                          )
+                        : GestureDetector(
+                            onTap: () => _onItemTapped(index),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  item.svgPath,
+                                  width: 20,
+                                  height: 20,
+                                  colorFilter: ColorFilter.mode(
+                                    Colors.grey.shade600,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                  }).toList(),
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
